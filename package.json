@@ -1,0 +1,29 @@
+{
+  "name": "prisma_type_script_template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kurosawa-kuro/prisma_type_script_template.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kurosawa-kuro/prisma_type_script_template/issues"
+  },
+  "homepage": "https://github.com/kurosawa-kuro/prisma_type_script_template#readme",
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "prisma": "^4.8.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.8.0"
+  }
+}
