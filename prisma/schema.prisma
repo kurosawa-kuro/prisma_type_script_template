@@ -22,10 +22,14 @@ model Post {
 }
 
 model Profile {
-  id      Int     @id @default(autoincrement())
-  bio     String?
-  user    User    @relation(fields: [user_id], references: [id])
-  user_id Int     @unique
+  id           Int     @id @default(autoincrement())
+  address      String?
+  phone        String?
+  mobile_phone String?
+  bio          String?
+  memo         String?
+  user         User    @relation(fields: [user_id], references: [id])
+  user_id      Int     @unique
 }
 
 model User {
