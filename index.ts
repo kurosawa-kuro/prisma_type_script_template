@@ -6,13 +6,18 @@ async function main() {
     await prisma.user.create({
         data: {
             name: 'Alice',
-            email: 'alice2@prisma.io',
+            email: 'alice@prisma.io',
             password: 'password',
             posts: {
-                create: { title: 'Hello World' },
+                create: [{ title: 'Hello World' }, { title: 'Hello World2' }]
             },
             profile: {
-                create: { bio: 'I like turtles' },
+                create: {
+                    address: 'すすきの',
+                    phone: '011-598-7894',
+                    mobile_phone: '080-6074-5153',
+                    bio: 'I like turtles',
+                },
             },
         },
     })

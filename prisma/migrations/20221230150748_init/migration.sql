@@ -14,7 +14,11 @@ CREATE TABLE `Post` (
 -- CreateTable
 CREATE TABLE `Profile` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `address` VARCHAR(191) NULL,
+    `phone` VARCHAR(191) NULL,
+    `mobile_phone` VARCHAR(191) NULL,
     `bio` VARCHAR(191) NULL,
+    `memo` VARCHAR(191) NULL,
     `user_id` INTEGER NOT NULL,
 
     UNIQUE INDEX `Profile_user_id_key`(`user_id`),
@@ -27,6 +31,7 @@ CREATE TABLE `User` (
     `name` VARCHAR(191) NULL,
     `email` VARCHAR(191) NOT NULL,
     `password` VARCHAR(191) NOT NULL,
+    `role` VARCHAR(191) NOT NULL DEFAULT 'user',
     `avatar` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
