@@ -37,30 +37,30 @@ model Profile {
 }
 
 model Post {
-  id        Int           @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   user_id   Int
-  user      User          @relation(fields: [user_id], references: [id])
-  title     String        @db.VarChar(255)
+  user      User        @relation(fields: [user_id], references: [id])
+  title     String      @db.VarChar(255)
   content   String?
-  image_url String?       @db.VarChar(255)
-  published Boolean       @default(false)
+  image_url String?     @db.VarChar(255)
+  published Boolean     @default(false)
   likes     Like[]
-  Tags      TagsOnPosts[]
+  Tags      Tag_Posts[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Tag {
-  id    Int           @id @default(autoincrement())
+  id    Int         @id @default(autoincrement())
   name  String
-  posts TagsOnPosts[]
+  posts Tag_Posts[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model TagsOnPosts {
+model Tag_Posts {
   post_id Int
   post    Post @relation(fields: [post_id], references: [id])
   Tag_id  Int
