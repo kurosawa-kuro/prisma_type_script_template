@@ -3,45 +3,25 @@ import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient()
 
-import Users from './data/users';
-// const Posts = require('./data/Posts');
+import { User as userInterface } from '../../app/interfaces/user';
 
-interface User {
-    id: number,
-    name: string,
-    email: string,
-    password: string,
-    avatar?: string,
-    createdAt: Date,
-    updatedAt: Date,
-}
+import { Users as usersData } from './data/users';
+import { Posts as postsData } from './data/posts';
 
 async function runSeeders() {
-
-    // Users
     await deleteMany()
 
     await seed_users()
-
-
-    // Posts
-    // await Promise.all(
-    //     Posts.map(async (post: any) =>
-    //         prisma.post.upsert({
-    //             where: { id: post.id },
-    //             update: {},
-    //             create: post,
-    //         })
-    //     )
-    // );
+    await seed_posts()
 }
 
 async function seed_users() {
     // console.log(await bcrypt.hash('password', 10))
     await Promise.all(
-        Users.map(async (user: User) =>
+        usersData.map(async (user: userInterface) =>
             await prisma.user.create({
                 data: {
+                    id: user.id,
                     name: user.name,
                     email: user.email,
                     password: user.password,
@@ -54,12 +34,30 @@ async function seed_users() {
     );
 }
 
+async function seed_posts() {
+    await Promise.all(
+        postsData.map(async (post: any) =>
+            await prisma.post.create({
+                data: {
+                    id: post.id,
+                    user_id: post.user_id,
+                    title: post.title,
+                    content: post.content,
+                    image_url: post.image_url,
+                    published: post.published
+                }
+            })
+        )
+    );
+}
+
 
 async function deleteMany() {
+    const deletePosts = prisma.post.deleteMany({})
     const deleteUsers = prisma.user.deleteMany({})
 
     // The transaction runs synchronously so deleteUsers must run last.
-    await prisma.$transaction([deleteUsers])
+    await prisma.$transaction([deletePosts, deleteUsers])
 }
 
 runSeeders()

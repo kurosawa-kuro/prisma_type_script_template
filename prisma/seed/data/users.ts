@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-const Users = [
+export const Users = [
     // User 1
     {
         id: 1,
@@ -40,5 +40,3 @@ const Users = [
     //     ),
     // }
 ];
-
-export = Users;
