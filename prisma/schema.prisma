@@ -10,38 +10,51 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  user_id   Int
-  user      User     @relation(fields: [user_id], references: [id])
-  title     String   @db.VarChar(255)
-  content   String?
-  image_url String?  @db.VarChar(255)
-  published Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Profile {
-  id           Int     @id @default(autoincrement())
-  user_id      Int     @unique
-  user         User    @relation(fields: [user_id], references: [id])
-  address      String?
-  phone        String?
-  mobile_phone String?
-  bio          String?
-  memo         String?
-}
-
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String?
-  email     String   @unique
-  password  String
-  role      String   @default("user")
-  avatar    String?
-  posts     Post[]
-  profile   Profile?
+  id         String   @unique
+  name       String
+  email      String   @unique
+  imageUrl   String
+  password   String
+  posts      Post[]
+  likes      Like[]
+  followedBy Follow[] @relation("following")
+  following  Follow[] @relation("follower")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  caption   String?
+  imageUrl  String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  likes     Like[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Follow {
+  id              String   @id @default(cuid())
+  followedUser    User     @relation("follower", fields: [followedUserId], references: [id])
+  followedUserId  String
+  followingUser   User     @relation("following", fields: [followingUserId], references: [id])
+  followingUserId String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([followedUserId, followingUserId])
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, postId])
 }
