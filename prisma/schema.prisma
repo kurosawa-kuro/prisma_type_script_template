@@ -11,16 +11,17 @@ datasource db {
 }
 
 model User {
-  id         Int       @id @default(autoincrement())
+  id         Int           @id @default(autoincrement())
   name       String
-  email      String    @unique
+  email      String        @unique
   password   String
   avatar     String?
   profile    Profile?
+  groups     User_Groups[]
   posts      Post[]
   likes      Like[]
-  followedBy Follows[] @relation("following")
-  following  Follows[] @relation("follower")
+  followedBy Follows[]     @relation("following")
+  following  Follows[]     @relation("follower")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -35,6 +36,27 @@ model Profile {
   mobile_phone String?
   bio          String?
   memo         String?
+}
+
+model Group {
+  id    Int           @id @default(autoincrement())
+  name  String
+  users User_Groups[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User_Groups {
+  user_id  Int
+  user     User  @relation(fields: [user_id], references: [id])
+  group_id Int
+  group    Group @relation(fields: [group_id], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([user_id, group_id])
 }
 
 model Post {
