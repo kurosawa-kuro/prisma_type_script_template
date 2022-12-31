@@ -14,15 +14,16 @@ model User {
   id         Int       @id @default(autoincrement())
   name       String
   email      String    @unique
-  avatar     String?
   password   String
+  avatar     String?
   profile    Profile?
   posts      Post[]
   likes      Like[]
   followedBy Follows[] @relation("following")
   following  Follows[] @relation("follower")
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Profile {
@@ -73,22 +74,23 @@ model Tag_Posts {
 }
 
 model Follows {
-  follower    User @relation("follower", fields: [followerId], references: [id])
-  followerId  Int
-  following   User @relation("following", fields: [followingId], references: [id])
-  followingId Int
+  follower     User @relation("follower", fields: [follower_id], references: [id])
+  follower_id  Int
+  following    User @relation("following", fields: [following_id], references: [id])
+  following_id Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@id([followerId, followingId])
+  @@id([follower_id, following_id])
 }
 
 model Like {
-  user_id   Int      @unique
-  user      User     @relation(fields: [user_id], references: [id])
-  post_id   Int      @unique
-  post      Post     @relation(fields: [post_id], references: [id])
+  user_id Int  @unique
+  user    User @relation(fields: [user_id], references: [id])
+  post_id Int  @unique
+  post    Post @relation(fields: [post_id], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
