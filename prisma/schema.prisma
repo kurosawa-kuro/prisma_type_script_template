@@ -11,50 +11,86 @@ datasource db {
 }
 
 model User {
-  id         String   @unique
+  id         Int       @id @default(autoincrement())
   name       String
-  email      String   @unique
-  imageUrl   String
+  email      String    @unique
+  avatar     String?
   password   String
+  profile    Profile?
   posts      Post[]
   likes      Like[]
-  followedBy Follow[] @relation("following")
-  following  Follow[] @relation("follower")
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  followedBy Follows[] @relation("following")
+  following  Follows[] @relation("follower")
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model Profile {
+  id           Int     @id @default(autoincrement())
+  user_id      Int     @unique
+  user         User    @relation(fields: [user_id], references: [id])
+  address      String?
+  phone        String?
+  mobile_phone String?
+  bio          String?
+  memo         String?
 }
 
 model Post {
-  id        String   @id @default(cuid())
-  caption   String?
-  imageUrl  String
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
+  id        Int           @id @default(autoincrement())
+  user_id   Int
+  user      User          @relation(fields: [user_id], references: [id])
+  title     String        @db.VarChar(255)
+  content   String?
+  image_url String?       @db.VarChar(255)
+  published Boolean       @default(false)
   likes     Like[]
+  Tags      TagsOnPosts[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Follow {
-  id              String   @id @default(cuid())
-  followedUser    User     @relation("follower", fields: [followedUserId], references: [id])
-  followedUserId  String
-  followingUser   User     @relation("following", fields: [followingUserId], references: [id])
-  followingUserId String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+model Tag {
+  id    Int           @id @default(autoincrement())
+  name  String
+  posts TagsOnPosts[]
 
-  @@unique([followedUserId, followingUserId])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TagsOnPosts {
+  post_id Int
+  post    Post @relation(fields: [post_id], references: [id])
+  Tag_id  Int
+  Tag     Tag  @relation(fields: [Tag_id], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([post_id, Tag_id])
+}
+
+model Follows {
+  follower    User @relation("follower", fields: [followerId], references: [id])
+  followerId  Int
+  following   User @relation("following", fields: [followingId], references: [id])
+  followingId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([followerId, followingId])
 }
 
 model Like {
-  id        String   @id @default(cuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  post      Post     @relation(fields: [postId], references: [id])
-  postId    String
+  user_id   Int      @unique
+  user      User     @relation(fields: [user_id], references: [id])
+  post_id   Int      @unique
+  post      Post     @relation(fields: [post_id], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([userId, postId])
+  @@id([user_id, post_id])
 }
