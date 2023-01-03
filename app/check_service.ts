@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 // import { read } from './app/services/user'
-import { UserService } from './app/services/UserService'
+import { UserService } from './services/UserService'
 const prisma = new PrismaClient()
 
 async function main() {
